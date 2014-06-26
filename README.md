@@ -7,6 +7,12 @@ sw for tutor session
 - Circuits described in breadboard_hasco2014.png. A thermistor and a photodiode are connected to an Arduino board
 - Firmware code is in photodiode_resistor.ino . You can compile it and upload to the board with the Arduino IDE.
 
+The python scripts need the following libraries:
+- PySerial http://pyserial.sourceforge.net
+- Flask http://flask.pocoo.org
+- urllib2 (built-in)
+- socket (built-in)
+
 To run:
 1) In a bash shell, launch ./post_serial.py
 2) To get the readings, you can either:

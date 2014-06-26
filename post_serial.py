@@ -26,16 +26,11 @@ nevents = 0
 
 
 def FakeInput():
-    print "INFO: data from fake input"
     
-    localtime   = time.localtime()
-
-#timestamp   = time.strftime("%Y%m%d%H%M%S", localtime)
-    timestamp   = time.time()
     volt        = random.gauss( 3.0, 0.01 )
     temp        = random.gauss( 27.0, 0.3 )
 
-    txt = "%s,%s,%s" % ( timestamp, 1000*volt, 1000*temp )
+    txt = "%3.2f,%3.2f" % ( volt, temp )
 
     return txt
 
@@ -70,8 +65,10 @@ def get_data_page():
     for n in range( nreadings ):
         
         if mode == Mode.online:
+            print "INFO: data taken from Arduino board connected on", port
             info = ser.readline()
         else:
+            print "INFO: data from fake input"
             info = FakeInput()
     
         eventid = int( "0xe0000000", 16 ) + nevents
@@ -83,10 +80,9 @@ def get_data_page():
         # number of seconds since the unix epoch
         # to decode:
         # d = datetime.datetime.fromtimestamp(ts)
-        timestamp   = int( float(info[0]) )
-        
-        volt        = int( float(info[1]) ) + int( "0xd0000000", 16 )
-        temp        = int( float(info[2]) ) + int( "0xd1000000", 16 )
+        timestamp   = int( float( time.time() ) )
+        volt        = int( 1000*float(info[0]) ) + int( "0xd0000000", 16 )
+        temp        = int( 1000*float(info[1]) ) + int( "0xd1000000", 16 )
         
         stream += [ hex(timestamp) ]
         stream += [ hex(volt) ]
